@@ -24,6 +24,11 @@ def re_split(str):
 
     return split_list
 
+def re_match(str):
+    num = int(re.match(r'\d{1,2}', str).group())
+
+    return num
+
 # 여러개의 점 -> 1개 점
 new_id = re.sub(r'\.+', '.', example_string)
 
@@ -37,9 +42,10 @@ new_id = new_id.lstrip('.')
 # 음수 필터링
 str = re.findall(r'-?\d', 'abc -12 and 34 and --56')
 str2 = re.findall(r'-?\d+', 'abc -12 and 34 and --56')
-print(str)
-print(str2)
+# print(str)
+# print(str2)
 
-# print(re_findall(example_string))
-# print(re_sub(example_string))
-# print(re_split(example_string))
+print(re_findall(example_string))
+print(re_sub(example_string))
+print(re_split(example_string))
+print(re_match("0S"))

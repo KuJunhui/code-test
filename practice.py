@@ -3,8 +3,8 @@ from collections import deque
 # 너비 우선 탐색
 def bfs(start, graph, n):
     visited = [False] * (n + 1)
-    visited[start] = True
     q = deque([start])
+    visited[start] = True
 
     while q:
         cur = q.popleft()

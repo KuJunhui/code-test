@@ -1,23 +1,26 @@
 import numpy as np
 
-
 def solution(n, k):
-    split = str(np.base_repr(n, base=k)).split('0')
+    base_k = np.base_repr(n, base=k)
+    lst = base_k.split('0')
+    answer = 0
 
-    # 필터링
-    split = [x for x in split if x != '' and is_prime(int(x))]
+    for num in lst:
+        if num != '':
+            if is_prime(int(num)):
+                answer += 1
 
-    return len(split)
+    return answer
 
-
-def is_prime(x):
-    if x < 2:
+def is_prime(n):
+    if n < 2:
         return False
-    if x == 2:
+    elif n == 2:
         return True
-    if x % 2 == 0:
-        return False
-    for i in range(3, int(x ** 0.5) + 1, 2):  # 홀수만 검사
-        if x % i == 0:
-            return False
+    elif n > 2:
+        for i in range(3, int(n**0.5) + 1, 2):
+            if n % i == 0:
+                return False
     return True
+
+print(solution(437674, 3))

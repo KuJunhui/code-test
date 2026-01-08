@@ -19,9 +19,12 @@ def solution(n, k):
 
     # 3. 소수 판별 및 개수 카운트
     count = 0
+    print(candidates)
     for c in candidates:
         if c != '':  # 빈 문자열 제외
             num = int(c)
             if is_prime(num):
                 count += 1
     return count
+
+print(solution(437674, 3))
