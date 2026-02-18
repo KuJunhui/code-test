@@ -31,5 +31,3 @@ def solution(n, results):
             answer += 1
 
     return answer
-
-# 1 2 3 4 5
