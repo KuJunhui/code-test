@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/programmers/SQL고득점Kit/SUM_MAX_MIN/Lv1잡은물고기중가장큰물고기의길이구하기/내풀이.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/programmers/SQL고득점Kit/SUM_MAX_MIN/Lv1잡은물고기중가장큰물고기의길이구하기/해설.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/programmers/SQL고득점Kit/SUM_MAX_MIN/Lv1최댓값구하기/내풀이.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/programmers/SQL고득점Kit/SUM_MAX_MIN/Lv1최댓값구하기/해설.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/programmers/SQL고득점Kit/SUM_MAX_MIN/Lv2가격이제일비싼식품의정보출력하기/내풀이.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/programmers/SQL고득점Kit/SUM_MAX_MIN/Lv2가격이제일비싼식품의정보출력하기/해설.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/programmers/SQL고득점Kit/SUM_MAX_MIN/Lv2동물수구하기/내풀이.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/programmers/SQL고득점Kit/SUM_MAX_MIN/Lv2동물수구하기/해설.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/programmers/SQL고득점Kit/SUM_MAX_MIN/Lv2연도별대장균크기의편차구하기/내풀이.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/programmers/SQL고득점Kit/SUM_MAX_MIN/Lv2연도별대장균크기의편차구하기/해설.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/programmers/SQL고득점Kit/SUM_MAX_MIN/Lv2조건에맞는아이템들의가격의총합구하기/내풀이.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/programmers/SQL고득점Kit/SUM_MAX_MIN/Lv2조건에맞는아이템들의가격의총합구하기/해설.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/programmers/SQL고득점Kit/SUM_MAX_MIN/Lv2중복제거하기/내풀이.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/programmers/SQL고득점Kit/SUM_MAX_MIN/Lv2중복제거하기/해설.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/programmers/SQL고득점Kit/SUM_MAX_MIN/Lv2최솟값구하기/내풀이.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/programmers/SQL고득점Kit/SUM_MAX_MIN/Lv2최솟값구하기/해설.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/programmers/SQL고득점Kit/SUM_MAX_MIN/Lv3물고기종류별대어찾기/내풀이.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/programmers/SQL고득점Kit/SUM_MAX_MIN/Lv3물고기종류별대어찾기/해설.sql" dialect="GenericSQL" />
+  </component>
+</project>
