@@ -67,3 +67,5 @@ def solution(game_board, table):
                     break
 
     return total_count
+
+# 1 2 3 4

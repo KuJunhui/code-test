@@ -27,7 +27,7 @@ def fibonacci_sequence(n):
         seq.append(seq[-1] + seq[-2])
     return seq[:n]
 
-print(fibonacci_sequence(10))
+# print(fibonacci_sequence(10))
 
 def is_primary(n):
     if n < 2:
