@@ -27,5 +27,3 @@ def solution(name: str) -> int:
         )
 
     return up_down + left_right
-
-# 1 2
