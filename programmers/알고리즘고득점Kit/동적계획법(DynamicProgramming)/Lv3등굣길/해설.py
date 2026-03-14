@@ -17,6 +17,6 @@ def solution(m, n, puddles):
             if x == 1 and y == 1:
                 continue  # 시작점은 이미 1로 세팅됨
 
-            dp[y][x] = (dp[y - 1][x] + dp[y][x - 1]) % MOD
+            dp[y][x] = (dp[y - 1][x] + dp[y][x - 1])
 
-    return dp[n][m]
+    return dp[n][m] % MOD

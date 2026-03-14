@@ -15,7 +15,5 @@ def solution(scoville, K):
         new_food = first_food + second_food * 2
         heapq.heappush(scoville, new_food)
         count += 1
-    # print(count)
-    # print(scoville)
 
     return count
