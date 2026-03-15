@@ -29,5 +29,3 @@ def solution(jobs):
             time = arr[idx][0]
 
     return total // n
-
-# 
