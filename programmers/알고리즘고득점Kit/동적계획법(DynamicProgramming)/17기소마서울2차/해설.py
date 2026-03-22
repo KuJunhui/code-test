@@ -27,3 +27,6 @@ def solution(n, q, w, e, r):
         prev_lose, prev_win = curr_lose, curr_win
 
     return max(prev_lose, prev_win)
+
+print(solution(3, 3, 5, 4, 1)) # 13
+print(solution(4, 10, 2, 8, 1)) # 32

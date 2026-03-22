@@ -24,22 +24,15 @@ def solution(n, infection, edges, k):
 
     # states = 현재까지 가능한 감염 상태들
     states = {frozenset([infection])}
-    answer = 1
 
     for _ in range(k):
         next_states = set()
 
         for state in states:
-            answer = max(answer, len(state))
-
             for pipe_type in [1, 2, 3]:
                 new_state = spread(state, pipe_type)
                 next_states.add(new_state)
-
         states = next_states
 
-    # 마지막 states도 확인
-    for state in states:
-        answer = max(answer, len(state))
+    return max(len(state) for state in states)
 
-    return answer

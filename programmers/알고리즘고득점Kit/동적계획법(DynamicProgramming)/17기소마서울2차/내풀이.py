@@ -1,10 +1,8 @@
 def solution(n, q, w, e, r):
-    # q: a승, b패
-    # w: a패, b승
-    # e: a승, b승
-    # r: a패, b패
-    # b의 첫 번째 게임은 항상 승
-
+    # q: (a승, b패)
+    # w: (a패, b승)
+    # e: (a승, b승)
+    # r: (a패, b패)
     if n == 1:
         return max(w, e)
 
