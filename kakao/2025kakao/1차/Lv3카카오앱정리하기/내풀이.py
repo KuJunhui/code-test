@@ -160,4 +160,4 @@ def solution(board, commands):
 
     return board
 
-# 1 
+# 1 2 3 4 

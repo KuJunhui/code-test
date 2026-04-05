@@ -1,53 +1,30 @@
+import re
+
 def solution(dartResult):
-    # squareType = ["S", "D", "T"]
-    # option = ["*", "#"]
-    split_str = get_split_str(dartResult)
-    calculateList = get_calculateList(split_str)
+    # 점수+보너스+옵션 패턴으로 자르기
+    rounds = re.findall(r'\d{1,2}[SDT][*#]?', dartResult)
+    scores = []
 
-    return sum(calculateList)
+    for i, r in enumerate(rounds):
+        # 1. 점수 뽑기
+        num = int(re.match(r'\d{1,2}', r).group())
 
-def get_split_str(dartResult):
-    split_str = []
-    part = ""
-    for token in dartResult:
-        if token.isdigit():
-            if part and part != "1":
-                split_str.append(part)
-                part = token
-            else:
-                part += token
-        else:
-            part += token
-    split_str.append(part)
+        # 2. 보너스 처리
+        if 'S' in r:
+            num **= 1
+        elif 'D' in r:
+            num **= 2
+        elif 'T' in r:
+            num **= 3
 
-    return split_str
+        # 3. 옵션 처리
+        if '*' in r:
+            num *= 2
+            if i > 0:  # 이전 점수도 2배
+                scores[i - 1] *= 2
+        elif '#' in r:
+            num *= -1
 
-def get_calculateList(split_str):
-    calculateList = []
-    for str in split_str:
-        num = 0
-        for token in str:
-            if token.isdigit():
-                if num == 1 and token == "0":
-                    num = 10
-                else:
-                    num = int(token)
-            elif token == "S":
-                num **= 1
-                calculateList.append(num)
-            elif token == "D":
-                num **= 2
-                calculateList.append(num)
-            elif token == "T":
-                num **= 3
-                calculateList.append(num)
-            elif token == "*":
-                if len(calculateList) == 1:
-                    calculateList[0] *= 2
-                elif len(calculateList) > 1:
-                    calculateList[-1] *= 2
-                    calculateList[-2] *= 2
-            elif token == "#":
-                calculateList[-1] *= -1
+        scores.append(num)
 
-    return calculateList
+    return sum(scores)

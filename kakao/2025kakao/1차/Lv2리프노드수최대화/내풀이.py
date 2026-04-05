@@ -21,7 +21,6 @@ def solution(dist_limit, split_limit):
         return total
 
     answer = 1
-
     for a in range(len(pow2)):
         if pow2[a] > S:
             break
