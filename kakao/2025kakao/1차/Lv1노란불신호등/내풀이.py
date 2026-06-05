@@ -26,3 +26,4 @@ def solution(signals):
             return t
 
     return -1
+

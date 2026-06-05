@@ -1,10 +1,11 @@
 from collections import Counter
 
+
 def solution(participant, completion):
-    participant_counter = Counter(participant)
-    completion_counter = Counter(completion)
-    fall_out_counter = participant_counter - completion_counter
+    p = Counter(participant)
+    c = Counter(completion)
 
-    # print(list(fall_out_counter.keys())[0])
+    p -= c
 
-    return list(fall_out_counter.keys())[0]
+    return list(p.keys())[0]
+

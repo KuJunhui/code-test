@@ -3,11 +3,11 @@ def solution(dist_limit, split_limit):
     S = split_limit
 
     pow2 = [1]
-    while pow2[-1] <= S:
+    while pow2[-1] < S:
         pow2.append(pow2[-1] * 2)
 
     pow3 = [1]
-    while pow3[-1] <= S:
+    while pow3[-1] < S:
         pow3.append(pow3[-1] * 3)
 
     def need_two(a, m):
@@ -55,6 +55,7 @@ def solution(dist_limit, split_limit):
             prefix = need_two(a, best)
 
             # prefix만큼 2-분기에 쓰고, 남은 건 전부 3-분기에 쓰는 게 최선
-            answer = max(answer, 1 + 2 * D - prefix)
+            answer = max(answer, 1 + prefix + 2 * (D - prefix))
 
     return answer
+

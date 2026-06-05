@@ -31,3 +31,4 @@ def solution(arr):
                 dp_min[i][j] = min(dp_min[i][j], min_val)
 
     return dp_max[0][n - 1]
+

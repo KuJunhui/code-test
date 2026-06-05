@@ -8,7 +8,7 @@ def solution(n, infection, edges, k):
         graph[b].append((a, t))
 
     # 현재 감염 상태 mask에서 type_num 파이프를 열었을 때
-    # 최종 감염 상태(mask)를 반환
+    # 최종 감염 상태 mask를 반환
     def spread(mask, type_num):
         new_mask = mask
         q = deque()
@@ -31,6 +31,7 @@ def solution(n, infection, edges, k):
     start_mask = 1 << infection
     states = {start_mask}
 
+    # k번의 라운드를 진행
     for _ in range(k):
         next_states = set()
 
@@ -42,4 +43,4 @@ def solution(n, infection, edges, k):
         states = next_states
 
     # 각 상태에서 감염된 노드 수(bit count)의 최댓값 반환
-    return max(bin(state).count('1') for state in states)
+    return max(state.bit_count() for state in states)
