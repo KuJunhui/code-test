@@ -25,5 +25,3 @@ def solution(message, spoiler_ranges):
     spoil_words -= set(not_spoil_words)
 
     return len(spoil_words)
-
-# 1 2 3

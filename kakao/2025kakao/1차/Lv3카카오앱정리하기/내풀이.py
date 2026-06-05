@@ -1,163 +1,153 @@
-from collections import deque, defaultdict
+from collections import defaultdict, deque
+
 
 def solution(board, commands):
-    N = len(board)
-    M = len(board[0])
+    n = len(board)
+    m = len(board[0])
 
-    # 앱 정보: info[id] = [top, left, size]
+    # 1. 앱 내부 셀 좌표 수집
     cells = defaultdict(list)
-    for i in range(N):
-        for j in range(M):
-            app_id = board[i][j]
-            if app_id == 0:
-                continue
-            cells[app_id].append((i, j))
+    for y in range(n):
+        for x in range(m):
+            if board[y][x] != 0:
+                cells[board[y][x]].append((y, x))
 
+    # 2. 앱 위치/크기 계산
     info = {}
-    for app_id, pos_list in cells.items():
-        min_r = min(r for r, c in pos_list)
-        max_r = max(r for r, c in pos_list)
-        min_c = min(c for r, c in pos_list)
+    for app_id, yx in cells.items():
+        max_x = max(x for y, x in yx)
+        min_x = min(x for y, x in yx)
+        min_y = min(y for y, x in yx)
 
-        size = max_r - min_r + 1
-        info[app_id] = [min_r, min_c, size]
+        size = max_x - min_x + 1
+        info[app_id] = [min_y, min_x, size]
 
-    def remove_square(app_id, r, c, size):
-        for i in range(r, r + size):
-            for j in range(c, c + size):
-                if board[i][j] == app_id:
-                    board[i][j] = 0
+    # 3. 앱 삭제
+    def remove_app(y, x, size):
+        for dy in range(y, y + size):
+            for dx in range(x, x + size):
+                board[dy][dx] = 0
 
-    def push(app_id, direction, wrap_queue):
-        r, c, size = info[app_id]
-
-        # 1: 오른쪽
+    # 4. 앱 한 칸 밀기
+    def push(app_id, direction, reinsert_queue):
+        y, x, size = info[app_id]
+        # 오른쪽
         if direction == 1:
-            if c < M - size:
-                # 왼쪽 한 줄 제거
-                for i in range(r, r + size):
-                    board[i][c] = 0
+            if x + size < m:  # 격자 내부 이동
+                # 왼쪽 세로줄 삭제
+                for dy in range(y, y + size):
+                    board[dy][x] = 0
+                # 오른쪽 세로줄 추가
+                for dy in range(y, y + size):
+                    while board[dy][x + size] != 0:
+                        push(board[dy][x + size], direction, reinsert_queue)
+                    board[dy][x + size] = app_id
+                info[app_id][1] = x + 1
 
-                # 오른쪽 새 한 줄 채우기
-                new_col = c + size
-                for i in range(r, r + size):
-                    while board[i][new_col] != 0:
-                        push(board[i][new_col], direction, wrap_queue)
-                    board[i][new_col] = app_id
-
-                info[app_id][1] = c + 1
-            else:
-                # wrap: 일단 완전히 제거하고, 나중에 반대편 삽입
-                remove_square(app_id, r, c, size)
+            else:  # 앱 삭제 및 반대편 삽입
+                remove_app(y, x, size)
                 info[app_id][1] = 0
-                wrap_queue.append((app_id, direction))
-
-        # 3: 왼쪽
+                reinsert_queue.append((app_id, direction))
+        # 왼쪽
         elif direction == 3:
-            if c > 0:
-                # 오른쪽 한 줄 제거
-                for i in range(r, r + size):
-                    board[i][c + size - 1] = 0
+            if x > 0:  # 격자 내부 이동
+                # 오른쪽 세로줄 삭제
+                for dy in range(y, y + size):
+                    board[dy][x + size - 1] = 0
 
-                # 왼쪽 새 한 줄 채우기
-                new_col = c - 1
-                for i in range(r, r + size):
-                    while board[i][new_col] != 0:
-                        push(board[i][new_col], direction, wrap_queue)
-                    board[i][new_col] = app_id
+                # 왼쪽 세로줄 추가
+                for dy in range(y, y + size):
+                    while board[dy][x - 1] != 0:
+                        push(board[dy][x - 1], direction, reinsert_queue)
+                    board[dy][x - 1] = app_id
+                info[app_id][1] = x - 1
 
-                info[app_id][1] = c - 1
-            else:
-                remove_square(app_id, r, c, size)
-                info[app_id][1] = M - size
-                wrap_queue.append((app_id, direction))
-
-        # 2: 아래
+            else:  # 앱 삭제 및 반대편 삽입
+                remove_app(y, x, size)
+                info[app_id][1] = m - size
+                reinsert_queue.append((app_id, direction))
+        # 아래쪽
         elif direction == 2:
-            if r < N - size:
-                # 위쪽 한 줄 제거
-                for j in range(c, c + size):
-                    board[r][j] = 0
+            if y + size < n:  # 격자 내부 이동
+                # 위 가로줄 삭제
+                for dx in range(x, x + size):
+                    board[y][dx] = 0
 
-                # 아래쪽 새 한 줄 채우기
-                new_row = r + size
-                for j in range(c, c + size):
-                    while board[new_row][j] != 0:
-                        push(board[new_row][j], direction, wrap_queue)
-                    board[new_row][j] = app_id
+                # 아래 가로줄 추가
+                for dx in range(x, x + size):
+                    while board[y + size][dx] != 0:
+                        push(board[y + size][dx], direction, reinsert_queue)
+                    board[y + size][dx] = app_id
+                info[app_id][0] = y + 1
 
-                info[app_id][0] = r + 1
-            else:
-                remove_square(app_id, r, c, size)
+            else:  # 앱 삭제 및 반대편 삽입
+                remove_app(y, x, size)
                 info[app_id][0] = 0
-                wrap_queue.append((app_id, direction))
+                reinsert_queue.append((app_id, direction))
+        # 위쪽
+        elif direction == 4:
+            if y > 0:  # 격자 내부 이동
+                # 아래 가로줄 삭제
+                for dx in range(x, x + size):
+                    board[y + size - 1][dx] = 0
 
-        # 4: 위
-        else:
-            if r > 0:
-                # 아래쪽 한 줄 제거
-                for j in range(c, c + size):
-                    board[r + size - 1][j] = 0
+                # 위 가로줄 추가
+                for dx in range(x, x + size):
+                    while board[y - 1][dx] != 0:
+                        push(board[y - 1][dx], direction, reinsert_queue)
+                    board[y - 1][dx] = app_id
+                info[app_id][0] = y - 1
 
-                # 위쪽 새 한 줄 채우기
-                new_row = r - 1
-                for j in range(c, c + size):
-                    while board[new_row][j] != 0:
-                        push(board[new_row][j], direction, wrap_queue)
-                    board[new_row][j] = app_id
+            else:  # 앱 삭제 및 반대편 삽입
+                remove_app(y, x, size)
+                info[app_id][0] = n - size
+                reinsert_queue.append((app_id, direction))
 
-                info[app_id][0] = r - 1
-            else:
-                remove_square(app_id, r, c, size)
-                info[app_id][0] = N - size
-                wrap_queue.append((app_id, direction))
-
-    def insert_wrapped(app_id, direction, wrap_queue):
-        r, c, size = info[app_id]
-
-        # 오른쪽으로 밀려서 왼쪽에 등장
+    # 5. 앱 반대편에 삽입
+    def reinsert(app_id, direction, reinsert_queue):
+        y, x, size = info[app_id]
+        # 오른쪽
         if direction == 1:
-            for j in range(0, size):
-                for i in range(r, r + size):
-                    while board[i][j] != 0:
-                        push(board[i][j], direction, wrap_queue)
-                    board[i][j] = app_id
-
-        # 왼쪽으로 밀려서 오른쪽에 등장
+            # 왼쪽부터 세로줄 추가
+            for dx in range(size):
+                for dy in range(y, y + size):
+                    while board[dy][dx] != 0:
+                        push(board[dy][dx], direction, reinsert_queue)
+                    board[dy][dx] = app_id
+        # 왼쪽
         elif direction == 3:
-            for j in range(M - 1, M - size - 1, -1):
-                for i in range(r, r + size):
-                    while board[i][j] != 0:
-                        push(board[i][j], direction, wrap_queue)
-                    board[i][j] = app_id
+            # 오른쪽부터 세로줄 추가
+            for dx in range(m - 1, x - 1, -1):
+                for dy in range(y, y + size):
+                    while board[dy][dx] != 0:
+                        push(board[dy][dx], direction, reinsert_queue)
+                    board[dy][dx] = app_id
 
-        # 아래로 밀려서 위쪽에 등장
+        # 아래쪽
         elif direction == 2:
-            for i in range(0, size):
-                for j in range(c, c + size):
-                    while board[i][j] != 0:
-                        push(board[i][j], direction, wrap_queue)
-                    board[i][j] = app_id
+            # 위쪽부터 가로줄 추가
+            for dy in range(size):
+                for dx in range(x, x + size):
+                    while board[dy][dx] != 0:
+                        push(board[dy][dx], direction, reinsert_queue)
+                    board[dy][dx] = app_id
 
-        # 위로 밀려서 아래쪽에 등장
-        else:
-            for i in range(N - 1, N - size - 1, -1):
-                for j in range(c, c + size):
-                    while board[i][j] != 0:
-                        push(board[i][j], direction, wrap_queue)
-                    board[i][j] = app_id
+        # 위쪽
+        elif direction == 4:
+            # 아래쪽부터 가로줄 추가
+            for dy in range(n - 1, y - 1, -1):
+                for dx in range(x, x + size):
+                    while board[dy][dx] != 0:
+                        push(board[dy][dx], direction, reinsert_queue)
+                    board[dy][dx] = app_id
 
-    for app_id, direction in commands:
-        wrap_queue = deque()
+    # 6. 명령 실행
+    for ID, direction in commands:
+        reinsert_queue = deque()
 
-        # 현재 명령의 원래 push 수행
-        push(app_id, direction, wrap_queue)
-
-        # 격자 밖으로 나간 앱들을 차례대로 반대편에 다시 삽입
-        while wrap_queue:
-            wrapped_id, wrapped_dir = wrap_queue.popleft()
-            insert_wrapped(wrapped_id, wrapped_dir, wrap_queue)
+        push(ID, direction, reinsert_queue)
+        while reinsert_queue:
+            r_id, r_direction = reinsert_queue.popleft()
+            reinsert(r_id, r_direction, reinsert_queue)
 
     return board
-
-# 1 2 3 4 
