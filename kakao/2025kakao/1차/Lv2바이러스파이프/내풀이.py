@@ -1,14 +1,13 @@
 from collections import deque
 
 def solution(n, infection, edges, k):
-    # 그래프 저장
+    # 1) 그래프 저장
     graph = [[] for _ in range(n + 1)]
     for a, b, t in edges:
         graph[a].append((b, t))
         graph[b].append((a, t))
 
-    # 현재 감염 상태 mask에서 type_num 파이프를 열었을 때
-    # 최종 감염 상태 mask를 반환
+    # 2) 현재 감염 상태 mask에서 type_num 파이프를 열었을 때 최종 감염 상태 mask를 반환
     def spread(mask, type_num):
         new_mask = mask
         q = deque()
@@ -27,11 +26,11 @@ def solution(n, infection, edges, k):
 
         return new_mask
 
-    # 초기 감염 상태
+    # 3) 초기 감염 상태
     start_mask = 1 << infection
     states = {start_mask}
 
-    # k번의 라운드를 진행
+    # 4) k번의 라운드를 진행
     for _ in range(k):
         next_states = set()
 
@@ -45,4 +44,3 @@ def solution(n, infection, edges, k):
     # 각 상태에서 감염된 노드 수(bit count)의 최댓값 반환
     return max(state.bit_count() for state in states)
 
-# 1 2 3 4 
