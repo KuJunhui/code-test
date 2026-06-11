@@ -5,23 +5,23 @@ def solution(city, road):
     m = len(road)
     INF = float('inf')
 
-    # 1) 도시 좌표를 튜플로 변환
+    # 1) 도시 좌표 수집
     city_points = [(x, y) for x, y in city]
 
-    # 2) 각 점의 "카메라 제한 속도"
+    # 2) 각 중점의 제한 속도
     point_limit = {}
 
-    # 3) 한 점에 카메라가 여러 개면 제한 속도 중 최솟값을 저장
+    # 3) 각 중점의 제한 속도 중에 최솟값 저장
     def set_camera_limit(p, limit):
         if p in point_limit:
             point_limit[p] = min(point_limit[p], limit)
         else:
             point_limit[p] = limit
 
-    # 4) 각 도로 위에서 그래프 분할에 필요한 점들 저장
+    # 4) 각 도로에서 그래프 분할에 필요한 점들 구성
     road_points = [set() for _ in range(m)]
 
-    # 5) 각 도로의 양 끝점 + 카메라(중점) 추가
+    # 5) 각 도로의 양 끝점과 중점 추가
     for i, (x1, y1, x2, y2, limit) in enumerate(road):
         road_points[i].add((x1, y1))
         road_points[i].add((x2, y2))
@@ -29,7 +29,7 @@ def solution(city, road):
         road_points[i].add(mid)
         set_camera_limit(mid, limit)
 
-    # 6) 점 p가 도로 r 위에 있는지 판정
+    # 6) 점 p가 도로 r위에 있는지 판정
     def point_on_road(p, r):
         x, y = p
         x1, y1, x2, y2, _ = r
@@ -38,8 +38,8 @@ def solution(city, road):
         else:  # vertical
             return x == x1 and y1 <= y <= y2
 
-    # 7) 두 도로 r1, r2의 교점을 반환 (만나지 않으면 None)
-    # 둘 다 수평/수직이면 끝점 접촉만, 수평×수직이면 실제 교차점 계산
+    # 7) 두 도로 r1, r2의 교점을 반환(없으면 None)
+    # 둘 다 수평/수직이면 끝점 리턴, 수평×수직이면 교차점 리턴
     def intersection_point(r1, r2):
         x1, y1, x2, y2, _ = r1
         a1, b1, a2, b2, _ = r2
@@ -80,13 +80,13 @@ def solution(city, road):
                 return (x1, b1)
             return None
 
-    # 8) 도시가 지나가는 도로에 도시 위치 추가
+    # 8) 도로 위의 도시 좌표 추가
     for p in city_points:
         for ri, r in enumerate(road):
             if point_on_road(p, r):
                 road_points[ri].add(p)
 
-    # 9) 도로끼리 만나는 교점 추가
+    # 9) 두 도로간의 교점 추가
     for i in range(m):
         for j in range(i + 1, m):
             p = intersection_point(road[i], road[j])
@@ -126,16 +126,16 @@ def solution(city, road):
             pts.sort(key=lambda p: p[1])
 
         for a, b in zip(pts, pts[1:]):
-            u, v = get_id(a), get_id(b)
+            u, v = point_id[a], point_id[b]
             add_edge(u, v)
 
-    # 12) 각 정점의 제한값(카메라 없으면 INF)
+    # 12) 각 정점의 제한속도(카메라 없으면 INF)
     node_limit = [INF] * V
     for p in point_limit:
         node_limit[point_id[p]] = point_limit[p]
 
     # 13) 1번 도시에서 widest path
-    # dist[v] = v까지 갈 때 가능한 "최대 일정 속도"
+    # dist[v] = v까지 가능한 최고 속도
     start = point_id[city_points[0]]
     dist = [-1] * V
     dist[start] = INF
@@ -143,20 +143,21 @@ def solution(city, road):
 
     while pq:
         cur_neg, u = heapq.heappop(pq)
-        cur = -cur_neg
-        if cur < dist[u]:
+        speed = -cur_neg    # u까지 가능한 최고 속도
+        if speed < dist[u]: # 힙에 남아있던 예전값 무시
             continue
 
         for v in graph[u]:
-            cand = min(cur, node_limit[v])
-            if cand > dist[v]:
-                dist[v] = cand
-                heapq.heappush(pq, (-cand, v))
+            bottleneck = min(speed, node_limit[v])
+            if bottleneck > dist[v]:    # 기존 제한속도보다 빠르면 갱신
+                dist[v] = bottleneck
+                heapq.heappush(pq, (-bottleneck, v))
 
-    # 14) 2 ~ n번 도시의 최고 속도를 번호 순으로 구성
+    # 14) 2 ~ n번 도시의 최고 속도 구성
     answer = []
     for p in city_points[1:]:
         d = dist[point_id[p]]
         answer.append(0 if d >= INF else d)
 
     return answer
+
